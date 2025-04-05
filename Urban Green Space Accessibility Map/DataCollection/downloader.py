@@ -25,10 +25,10 @@ def download_osm_data(place, output_path):
     green_spaces = ox.features_from_place(place, tags)
 
     if green_spaces.empty:
-        print("⚠️ No green space data found.")
+        print("No green space data found.")
     else:
         green_spaces.to_file(output_path, driver="GeoJSON")
-        print(f"✅ Data Saved to {output_path}")
+        print(f"Data Saved to {output_path}")
 
 
 def download_osm_buildings(place, output_path, bbox=None):
@@ -46,22 +46,22 @@ def download_osm_buildings(place, output_path, bbox=None):
     try:
         if bbox:
             north, south, east, west = bbox
-            print(f"🔍 Using bounding box: {bbox}")
+            print(f"Using bounding box: {bbox}")
             buildings = ox.features_from_bbox(north, south, east, west, tags=tags)
         else:
-            print(f"📍 Geocoding place: {place}")
+            print(f"Geocoding place: {place}")
             gdf = ox.geocode_to_gdf(place)
             polygon = gdf.geometry[0]
             buildings = ox.features_from_polygon(polygon, tags=tags)
 
-        print(f"🏗️  Downloaded {len(buildings)} building footprints.")
+        print(f"Downloaded {len(buildings)} building footprints.")
         buildings.to_file(output_path, driver="GeoJSON")
-        print(f"✅ Buildings saved to {output_path}")
+        print(f"Buildings saved to {output_path}")
 
     except MemoryError:
-        print("❗ MemoryError: Try reducing the size of the area (use a smaller place or a bounding box).")
+        print("MemoryError: Try reducing the size of the area (use a smaller place or a bounding box).")
     except Exception as e:
-        print(f"❗ Failed to download buildings: {e}")
+        print(f"Failed to download buildings: {e}")
 
 
 def download_demography_data(base_url, typename, output_path):
@@ -76,11 +76,36 @@ def download_demography_data(base_url, typename, output_path):
         gdf = gpd.read_file(response)
 
         if gdf.empty:
-            print("⚠️ No data found.")
+            print("No data found.")
         else:
             gdf.to_file(output_path, driver="GeoJSON")
-            print(f"✅ Data saved to: {output_path}")
+            print(f"Data saved to: {output_path}")
 
     except Exception as e:
-        print(f"❌ Failed to download: {e}")
+        print(f"Failed to download: {e}")
+
+
+def download_road_network(place="Berlin, Germany", output_path="data/berlin_roads.geojson"):
+    """
+    Downloads OSM road network for a place and saves it as GeoJSON.
+    """
+    os.makedirs(os.path.dirname(output_path), exist_ok=True)
+
+    print(f"🛣 Downloading road network for: {place}")
+
+    try:
+        # Get the drivable road network (you can also use network_type='walk' or 'all')
+        G = ox.graph_from_place(place, network_type='walk')
+
+        # Convert to GeoDataFrame
+        edges = ox.graph_to_gdfs(G, nodes=False, edges=True)
+
+        # Save as GeoJSON
+        edges.to_file(output_path, driver="GeoJSON")
+
+        print(f"✅ Road network saved to: {output_path}")
+
+    except Exception as e:
+        print(f"❌ Failed to download road network: {e}")
+
 
