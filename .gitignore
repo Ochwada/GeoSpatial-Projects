@@ -8,3 +8,4 @@ data/
 **data
 
 .iml
+/Urban Green Space Accessibility Map/DataCollection/cache/*.json
