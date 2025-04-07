@@ -6,6 +6,10 @@ data
 data/
 **data/
 **data
+cache/
+**cache/
 
 .iml
 /Urban Green Space Accessibility Map/DataCollection/cache/*.json
+*.json
+Urban Green Space Accessibility Map/DataCollection/cache/
