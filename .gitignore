@@ -1,15 +1,17 @@
 
 
+# IntelliJ and PyCharm
+.idea/
+*.iml
 
-.idea
-data
-data/
-**data/
-**data
+# Cache and data folders
 cache/
-**cache/
+**/cache/
+data/
+**/data/
 
-.iml
-/Urban Green Space Accessibility Map/DataCollection/cache/*.json
+# JSON files (optional, if you want to block all)
 *.json
-Urban Green Space Accessibility Map/DataCollection/cache/
+
+# Specific folder paths
+/Urban Green Space Accessibility Map/DataCollection/cache//Urban Green Space Accessibility Map/DataCollection/cache/
