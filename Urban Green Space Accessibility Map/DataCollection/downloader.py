@@ -85,27 +85,35 @@ def download_demography_data(base_url, typename, output_path):
         print(f"Failed to download: {e}")
 
 
-def download_road_network(place="Berlin, Germany", output_path="data/berlin_roads.geojson"):
+def download_road_network(place, output_path):
     """
-    Downloads OSM road network for a place and saves it as GeoJSON.
+        Downloads and filters road network for highways only (e.g., motorway, trunk, primary, etc.).
     """
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
-
     print(f"🛣 Downloading road network for: {place}")
 
     try:
-        # Get the drivable road network (you can also use network_type='walk' or 'all')
-        G = ox.graph_from_place(place, network_type='walk')
-
-        # Convert to GeoDataFrame
+        # Download full road network
+        G = ox.graph_from_place(place, network_type='all')
         edges = ox.graph_to_gdfs(G, nodes=False, edges=True)
 
-        # Save as GeoJSON
-        edges.to_file(output_path, driver="GeoJSON")
+        # Define OSM highway types considered "highways"
+        highway_types = [
+            'motorway', 'motorway_link',
+            'trunk', 'trunk_link',
+            'primary', 'primary_link',
+            'secondary', 'secondary_link'
+        ]
 
-        print(f"✅ Road network saved to: {output_path}")
+        # Filter edges with matching highway type(s)
+        highways = edges[edges['highway'].apply(
+            lambda x: any(t in x if isinstance(x, list) else [x] for t in highway_types)
+        )]
+
+        # Save
+        highways.to_file(output_path, driver="GeoJSON")
+        print(f"✅ Highways saved to: {output_path} ({len(highways)} features)")
 
     except Exception as e:
-        print(f"❌ Failed to download road network: {e}")
-
+        print(f"❌ Failed to download highways: {e}")
 

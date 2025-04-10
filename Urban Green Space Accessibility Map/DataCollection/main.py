@@ -8,7 +8,7 @@ from downloader import (download_osm_data,
 if __name__ == '__main__':
     print("Hello Linda")
 
-    download_road_network("Berlin, Germany", "data/berlin_roads.geojson")
+    download_road_network("Berlin, Germany", "data/berlin_roads_highways.geojson")
 
     """
     # Use the base WFS URL (no GetCapabilities params!)
