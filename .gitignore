@@ -3,11 +3,16 @@
 # IntelliJ and PyCharm
 .idea/
 *.iml
+**/__pycache__/
+
+
+temp/
 
 # Cache and data folders
 cache/
 **/cache/
 data/
+**/data/
 **/data/
 
 # JSON files (optional, if you want to block all)
@@ -15,3 +20,5 @@ data/
 
 # Specific folder paths
 /Urban Green Space Accessibility Map/DataCollection/cache//Urban Green Space Accessibility Map/DataCollection/cache/
+
+__pycache__/downloader.cpython-312.pyc

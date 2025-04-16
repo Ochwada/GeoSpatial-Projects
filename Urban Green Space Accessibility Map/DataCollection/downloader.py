@@ -1,13 +1,7 @@
 import os
 import osmnx as ox
 import geopandas as gpd
-from shapely.geometry import box
-from shapely.ops import unary_union
 from owslib.wfs import WebFeatureService
-
-# Download OSM data (roads)
-
-
 
 # Download OSM data (leisure=park, landuse=grass, natural=wood)
 def download_osm_data(place, output_path):
